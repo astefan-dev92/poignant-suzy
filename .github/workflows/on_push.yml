@@ -1,8 +1,7 @@
 name: TSL-CI Branch Push
 
 on:
-    pull_request:
-        types: [synchronize]
+    push:
         branches:
             - tsl-preview-*
 
