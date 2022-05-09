@@ -4,7 +4,7 @@ on:
     pull_request:
         types: [opened]
         branches:
-            - 'tsl-preview-**'
+            - main
 
 jobs:
     branch_info:
@@ -32,3 +32,11 @@ jobs:
 
             - name: Test
               run: echo 'Test'
+
+    execute:
+      needs: [branch_info]
+      if: ${{ contains(needs.branch_info.outputs.branch_name, 'tsl-preview') }}
+
+      steps: 
+        - name: run rest of workflow
+          run: echo 'rest of workflow'
