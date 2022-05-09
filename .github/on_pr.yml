@@ -29,3 +29,6 @@ jobs:
                   OUTPUT=$(echo -n $branch_name | openssl dgst -sha256 -binary | xxd -p)
                   echo "::set-output name=branch_sha::${OUTPUT}"
                   echo "::set-output name=branch_name::$branch_name"
+
+            - name: Test
+              run: echo 'Test'
