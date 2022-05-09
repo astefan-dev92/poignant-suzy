@@ -39,4 +39,4 @@ jobs:
 
       steps: 
         - name: run rest of workflow
-          run: echo 'rest of workflow'
+          run: echo 'rest of test'
