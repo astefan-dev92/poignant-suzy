@@ -1,0 +1,31 @@
+name: TSL-CI Branch Deploy
+
+on:
+    pull_request:
+        types: [opened]
+        branches:
+            - 'tsl-preview-**'
+
+jobs:
+    branch_info:
+        runs-on: ubuntu-latest
+
+        outputs:
+            branch_name: ${{ steps.hash.outputs.branch_name }}
+            branch_sha: ${{ steps.hash.outputs.branch_sha }}
+
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+
+            - uses: FranzDiebold/github-env-vars-action@v2.3.1
+
+            - name: Generate Branch SHA
+              id: hash
+              env:
+                  branch_name: ${{ env.CI_ACTION_REF_NAME_SLUG }}
+              run: |
+                  OUTPUT=$(echo -n $branch_name | openssl dgst -sha256 -binary | xxd -p)
+                  echo "::set-output name=branch_sha::${OUTPUT}"
+                  echo "::set-output name=branch_name::$branch_name"
