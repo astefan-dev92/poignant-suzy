@@ -38,4 +38,4 @@ jobs:
 
         steps: 
             - name: run rest of workflow
-              run: echo 'sync'
+              run: echo 'sync 1'
