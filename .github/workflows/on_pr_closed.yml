@@ -4,7 +4,7 @@ on:
     pull_request:
         types: [closed]
         branches:
-            - tsl-preview-*
+            - main
 
 jobs:
     branch_info:
