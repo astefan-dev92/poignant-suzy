@@ -40,4 +40,4 @@ jobs:
 
       steps: 
         - name: run rest of workflow
-          run: echo 'rest of sync'
+          run: echo 'create'
