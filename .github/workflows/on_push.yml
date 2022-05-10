@@ -1,9 +1,10 @@
 name: TSL-CI Branch Push
 
 on:
-    push:
+    pull_request:
+        types: [synchronize]
         branches:
-            - tsl-preview-*
+            - main
 
 
 jobs:
@@ -29,3 +30,12 @@ jobs:
                   OUTPUT=$(echo -n $branch_name | openssl dgst -sha256 -binary | xxd -p)
                   echo "::set-output name=branch_sha::${OUTPUT}"
                   echo "::set-output name=branch_name::$branch_name"
+                  
+    execute:
+        needs: [branch_info]
+        runs-on: ubuntu-latest
+        if: ${{ contains(needs.branch_info.outputs.branch_name, 'tsl-preview') }}
+
+        steps: 
+            - name: run rest of workflow
+              run: echo 'rest of 5'
