@@ -16,7 +16,7 @@ jobs:
               with:
                   fetch-depth: 0
 
-            - uses: FranzDiebold/github-env-vars-action@v2.3.1
+            - uses: FranzDiebold/github-env-vars-action@v2.7.0
 
             - name: Generate Branch SHA
               id: hash
@@ -27,13 +27,9 @@ jobs:
                   echo "branch_sha=${OUTPUT}" >> $GITHUB_OUTPUT
                   echo "branch_name=$BN" >> $GITHUB_OUTPUT
 
-            - name: Test
-              run: echo 'Test'
-
     execute:
       needs: [branch_info]
       runs-on: ubuntu-latest
-      if: ${{ contains(needs.branch_info.outputs.branch_name, 'tsl-preview') }}
 
       steps: 
         - name: Branch Name
