@@ -24,7 +24,7 @@ jobs:
                   BRANCH_NAME: ${{ env.CI_ACTION_REF_NAME_SLUG }}
               run: |
                   echo "OUTPUT=$(echo -n $BRANCH_NAME | openssl dgst -sha256 -binary | xxd -p)"
-                  echo "branch_sha=${OUTPUT}" >> $GITHUB_OUTPUT
+                  echo "branch_sha=$OUTPUT" >> $GITHUB_OUTPUT
                   echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
     execute:
