@@ -27,8 +27,8 @@ jobs:
                   branch_name: ${{ env.CI_ACTION_REF_NAME_SLUG }}
               run: |
                   OUTPUT=$(echo -n $branch_name | openssl dgst -sha256 -binary | xxd -p)
-                  echo "::set-output name=branch_sha::${OUTPUT}"
-                  echo "::set-output name=branch_name::$branch_name"
+                  echo "branch_sha=${OUTPUT}" >> $GITHUB_OUTPUT
+                  echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
 
             - name: Test
               run: echo 'Test'
@@ -39,5 +39,8 @@ jobs:
       if: ${{ contains(needs.branch_info.outputs.branch_name, 'tsl-preview') }}
 
       steps: 
-        - name: run rest of workflow
-          run: echo 'create'
+        - name: Branch Name
+          run: echo ${{needs.branch_info.outputs.branch_name}}
+
+        - name: Branch SHA
+          run: echo ${{needs.branch_info.outputs.branch_sha}}
