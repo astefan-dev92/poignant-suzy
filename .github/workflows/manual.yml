@@ -4,12 +4,11 @@ on:
     workflow_dispatch
 
 jobs:
-    branch_info:
+    branch_name:
         runs-on: ubuntu-latest
 
         outputs:
-            branch_name: ${{ steps.hash.outputs.branch }}
-            branch_sha: ${{ steps.hash.outputs.branch }}
+            name: ${{ steps.hash.outputs.branch }}
 
         steps:
             - uses: actions/checkout@v3
@@ -18,22 +17,41 @@ jobs:
 
             - uses: FranzDiebold/github-env-vars-action@v2.7.0
 
-            - name: Generate Branch SHA
+            - name: Set Branch Name
               id: hash
               env:
                   BRANCH_NAME: ${{ env.CI_ACTION_REF_NAME_SLUG }}
               run: |
-                  echo "OUTPUT=$(echo -n $BRANCH_NAME | openssl dgst -sha256 -binary | xxd -p)"
-                  echo "branch=${OUTPUT}" >> $GITHUB_OUTPUT
                   echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
+    branch_sha:
+        needs: [branch_name]
+
+        runs-on: ubuntu-latest
+
+        outputs:
+            sha: ${{ steps.hash.outputs.branch }}
+
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+
+            - name: Set Branch SHA
+              id: hash
+              env:
+                  BRANCH_NAME: ${{ needs.branch_sha.outputs.branch_sha }}
+              run: |
+                  echo "OUTPUT=$(echo -n $BRANCH_NAME | openssl dgst -sha256 -binary | xxd -p)"
+                  echo "branch=${OUTPUT}" >> $GITHUB_OUTPUT
+
     execute:
-      needs: [branch_info]
+      needs: [branch_name, branch_sha]
       runs-on: ubuntu-latest
 
       steps: 
         - name: Branch Name
-          run: echo ${{needs.branch_info.outputs.branch_name}}
+          run: echo ${{needs.branch_name.outputs.name}}
 
         - name: Branch SHA
-          run: echo ${{needs.branch_info.outputs.branch_sha}}
+          run: echo ${{needs.branch_sha.outputs.sha}}
