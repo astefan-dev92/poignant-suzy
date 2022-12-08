@@ -8,8 +8,8 @@ jobs:
         runs-on: ubuntu-latest
 
         outputs:
-            branch_name: ${{ steps.hash.outputs.branch_name }}
-            branch_sha: ${{ steps.hash.outputs.branch_sha }}
+            branch_name: ${{ steps.hash.outputs.branch }}
+            branch_sha: ${{ steps.hash.outputs.branch }}
 
         steps:
             - uses: actions/checkout@v3
@@ -23,9 +23,9 @@ jobs:
               env:
                   BRANCH_NAME: ${{ env.CI_ACTION_REF_NAME_SLUG }}
               run: |
-                  echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
-                  echo "branch_sha=$(echo -n $BRANCH_NAME | openssl dgst -sha256 -binary | xxd -p)" >> $GITHUB_OUTPUT
-
+                  echo "OUTPUT=$(echo -n $BRANCH_NAME | openssl dgst -sha256 -binary | xxd -p)"
+                  echo "branch=${OUTPUT}" >> $GITHUB_OUTPUT
+                  echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
     execute:
       needs: [branch_info]
