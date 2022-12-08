@@ -1,0 +1,43 @@
+name: Manual Workflow
+
+on:
+    workflow_dispatch
+
+jobs:
+    branch_info:
+        runs-on: ubuntu-latest
+
+        outputs:
+            branch_name: ${{ steps.hash.outputs.branch_name }}
+            branch_sha: ${{ steps.hash.outputs.branch_sha }}
+
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+
+            - uses: FranzDiebold/github-env-vars-action@v2.3.1
+
+            - name: Generate Branch SHA
+              id: hash
+              env:
+                  branch_name: ${{ env.CI_ACTION_REF_NAME_SLUG }}
+              run: |
+                  OUTPUT=$(echo -n $branch_name | openssl dgst -sha256 -binary | xxd -p)
+                  echo "branch_sha=${OUTPUT}" >> $GITHUB_OUTPUT
+                  echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
+
+            - name: Test
+              run: echo 'Test'
+
+    execute:
+      needs: [branch_info]
+      runs-on: ubuntu-latest
+      if: ${{ contains(needs.branch_info.outputs.branch_name, 'tsl-preview') }}
+
+      steps: 
+        - name: Branch Name
+          run: echo ${{needs.branch_info.outputs.branch_name}}
+
+        - name: Branch SHA
+          run: echo ${{needs.branch_info.outputs.branch_sha}}
