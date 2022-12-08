@@ -23,8 +23,8 @@ jobs:
               env:
                   BN: ${{ env.CI_ACTION_REF_NAME_SLUG }}
               run: |
-                  OUTPUT=$(echo -n $BN | openssl dgst -sha256 -binary | xxd -p)
-                  echo "branch_sha=$OUTPUT" >> $GITHUB_OUTPUT
+                  echo "OUTPUT=$(echo -n $BN | openssl dgst -sha256 -binary | xxd -p)"
+                  echo "branch_sha=${OUTPUT}" >> $GITHUB_OUTPUT
                   echo "branch_name=$BN" >> $GITHUB_OUTPUT
 
             - name: Test
