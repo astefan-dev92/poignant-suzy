@@ -12,7 +12,7 @@ jobs:
             branch_sha: ${{ steps.hash.outputs.branch_sha }}
 
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
               with:
                   fetch-depth: 0
 
@@ -21,11 +21,11 @@ jobs:
             - name: Generate Branch SHA
               id: hash
               env:
-                  branch_name: ${{ env.CI_ACTION_REF_NAME_SLUG }}
+                  BN: ${{ env.CI_ACTION_REF_NAME_SLUG }}
               run: |
-                  OUTPUT=$(echo -n $branch_name | openssl dgst -sha256 -binary | xxd -p)
-                  echo "branch_sha=${OUTPUT}" >> $GITHUB_OUTPUT
-                  echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
+                  OUTPUT=$(echo -n $BN | openssl dgst -sha256 -binary | xxd -p)
+                  echo "branch_sha=$OUTPUT" >> $GITHUB_OUTPUT
+                  echo "branch_name=$BN" >> $GITHUB_OUTPUT
 
             - name: Test
               run: echo 'Test'
