@@ -42,7 +42,7 @@ jobs:
               env:
                   BRANCH_NAME: ${{ needs.branch_name.outputs.name }}
               run: |
-                  echo "OUTPUT=$(echo -n $BRANCH_NAME | openssl dgst -sha256 -binary | xxd -p)" >> $GITHUB_ENV
+                  echo "OUTPUT=$(echo -n $BRANCH_NAME | sha256sum)" >> $GITHUB_ENV
 
             - name: Set Branch SHA
               id: hash
