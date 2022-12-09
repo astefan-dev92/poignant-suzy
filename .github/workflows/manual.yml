@@ -2,7 +2,7 @@ name: Manual Workflow
 
 on:
     workflow_dispatch
-
+# echo "OUTPUT=$(echo -n $BRANCH_NAME | openssl dgst -sha256 -binary | xxd -p)"
 jobs:
     branch_name:
         runs-on: ubuntu-latest
@@ -41,7 +41,6 @@ jobs:
               env:
                   BRANCH_NAME: ${{ needs.branch_name.outputs.name }}
               run: |
-                  echo "OUTPUT=$(echo -n $BRANCH_NAME | openssl dgst -sha256 -binary | xxd -p)"
                   echo "sha=green" >> $GITHUB_OUTPUT
 
     execute:
