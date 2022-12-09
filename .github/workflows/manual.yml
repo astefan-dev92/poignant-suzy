@@ -38,8 +38,6 @@ jobs:
                   fetch-depth: 0
 
             - name: Set Branch SHA
-              env:
-                  BRANCH_NAME: ${{ needs.branch_name.outputs.name }}
               run: |
                   echo "sha=green" >> $GITHUB_OUTPUT
 
