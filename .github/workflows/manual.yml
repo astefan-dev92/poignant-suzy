@@ -42,7 +42,7 @@ jobs:
                   BRANCH_NAME: ${{ needs.branch_name.outputs.name }}
               run: |
                   echo "OUTPUT=$(echo -n $BRANCH_NAME | openssl dgst -sha256 -binary | xxd -p)"
-                  echo "sha=${OUTPUT}" >> $GITHUB_OUTPUT
+                  echo "sha=green" >> $GITHUB_OUTPUT
 
     execute:
       needs: [branch_name, branch_sha]
