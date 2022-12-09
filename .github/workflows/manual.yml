@@ -8,8 +8,8 @@ jobs:
         runs-on: ubuntu-latest
 
         outputs:
-            name: ${{ steps.hash.outputs.name }}
-            sha: ${{ steps.hash.outputs.sha }}
+            name: ${{ steps.name.outputs.name }}
+            sha: ${{ steps.sha.outputs.sha }}
 
         steps:
             - uses: actions/checkout@v3
@@ -18,14 +18,26 @@ jobs:
 
             - uses: FranzDiebold/github-env-vars-action@v2.7.0
 
-            - name: Set Branch Name
+            - name: Branch SHA
               id: hash
               env:
                   BRANCH_NAME: ${{ env.CI_ACTION_REF_NAME_SLUG }}
               run: |
-                  echo "OUTPUT=$(echo -n $BRANCH_NAME | sha256sum | head -c 40)"
+                  echo "OUTPUT=$(echo -n $BRANCH_NAME | sha256sum | head -c 40)" >> $GITHUB_ENV
+
+            - name: Set Branch Name
+              id: name
+              env:
+                  BRANCH_NAME: ${{ env.CI_ACTION_REF_NAME_SLUG }}
+              run: |
                   echo "name=$BRANCH_NAME" >> $GITHUB_OUTPUT
-                  echo "sha=${OUTPUT}" >> $GITHUB_OUTPUT
+
+            - name: Set Branch SHA
+              id: sha
+              env:
+                  BRANCH_NAME: ${{ env.CI_ACTION_REF_NAME_SLUG }}
+              run: |
+                  echo "sha=${{ env.OUTPUT }}" >> $GITHUB_OUTPUT
 
     execute:
       needs: [branch]
