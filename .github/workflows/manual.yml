@@ -30,7 +30,7 @@ jobs:
         runs-on: ubuntu-latest
 
         outputs:
-            sha: ${{ steps.hash.outputs.branch }}
+            sha: ${{ steps.hash.outputs.sha }}
 
         steps:
             - uses: actions/checkout@v3
@@ -38,12 +38,11 @@ jobs:
                   fetch-depth: 0
 
             - name: Set Branch SHA
-              id: hash
               env:
                   BRANCH_NAME: ${{ needs.branch_sha.outputs.branch_sha }}
               run: |
-                  echo "OUTPUT=$(echo -n $BRANCH_NAME | openssl dgst -sha256 -binary | xxd -p)" >> $GITHUB_STATE
-                  echo "branch=$OUTPUT" >> $GITHUB_OUTPUT
+                  echo "OUTPUT=$(echo -n $BRANCH_NAME | openssl dgst -sha256 -binary | xxd -p)"
+                  echo "sha=${OUTPUT}" >> $GITHUB_OUTPUT
 
     execute:
       needs: [branch_name, branch_sha]
