@@ -30,7 +30,7 @@ jobs:
         runs-on: ubuntu-latest
 
         outputs:
-            sha: ${{ steps.hash.outputs.sha }}
+            sha: ${{ steps.hash.outputs.test }}
 
         steps:
             - uses: actions/checkout@v3
@@ -39,7 +39,7 @@ jobs:
 
             - name: Set Branch SHA
               run: |
-                  echo "sha=green" >> $GITHUB_OUTPUT
+                  echo "test=green" >> $GITHUB_OUTPUT
 
     execute:
       needs: [branch_name, branch_sha]
